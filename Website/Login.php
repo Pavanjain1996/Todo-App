@@ -1,0 +1,26 @@
+<?php
+session_start();
+$username=$_POST['username'];
+$password=$_POST['password'];
+include('DBConnection.php');
+$query='select password from users where username="'.$username.'"';
+$res=mysqli_query($con,$query);
+$n=mysqli_num_rows($res);
+$login='NO';
+if($n==0)
+	header('location:Index.php');
+else{
+	for($i=0;$i<$n;$i++){
+		$row=mysqli_fetch_array($res);
+		if($row['password']==$password)
+			$login='YES';
+	}
+}
+if($login=='YES'){
+	$_SESSION['logstatus']='YES';
+	$_SESSION['username']=$username;
+	header('location:Home.php');
+}
+else
+	header('location:Index.php');
+?>
